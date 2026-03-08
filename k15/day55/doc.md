@@ -124,8 +124,6 @@
     - Backend gửi sự kiện vào kênh (publish hay trigger)
     - Tất cả client đang subscribe kênh đó đều nhận được sự kiện ngay lập tức
 
----
-
 ## 3. Soketi - Tự triển khai WebSocket server
 
 - Lý do chọn Soketi
