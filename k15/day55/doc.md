@@ -6,22 +6,24 @@
     - npm install để cài lại toàn bộ dependency
     - Thư mục generated của Prisma bị bỏ qua bởi git, nên sẽ không có sẵn sau khi clone
       - Nếu chạy npm run dev mà gặp lỗi không tìm thấy module `@prisma/client`, chạy lệnh sau
-        - bash:
+        - ```bash
           npx prisma generate
+          ```
       - Lệnh này tái tạo lại thư mục generated để dự án chạy được
     - File .env cũng bị git bỏ qua để bảo vệ thông tin bí mật
       - Dự án thường có file .env.example để làm mẫu
       - Copy file đó ra và đổi tên thành .env, rồi điền đúng các thông số
     - Nếu database chưa tồn tại, chạy lệnh sau để tạo lại toàn bộ cấu trúc bảng
-      - bash:
+      - ```bash
         npx prisma migrate dev
+        ```
 
   - Quy trình ba bước khi thay đổi cấu trúc database
     - Đây là quy trình bắt buộc mỗi khi cần thêm, sửa hoặc xóa bảng hay trường trong database
     - Bước 1 - Viết schema trong file prisma/schema.prisma
       - Thêm hoặc chỉnh sửa model theo nhu cầu
       - Ví dụ thêm bảng Product
-        - prisma:
+        - ```prisma
           model Product {
           id Int @id @default(autoincrement())
           name String
@@ -31,13 +33,16 @@
           quantity Int
           createdAt DateTime @default(now())
           }
+          ```
     - Bước 2 - Chạy migration để đồng bộ database
-      - bash:
+      - ```bash
         npx prisma migrate dev --name create_product_table
+        ```
       - Prisma tự tạo file migration trong thư mục prisma/migrations và áp dụng vào database thật
     - Bước 3 - Chạy generate để cập nhật Prisma Client
-      - bash:
+      - ```bash
         npx prisma generate
+        ```
       - Bước này cần thiết để code có thể sử dụng model mới vừa tạo
     - Sau ba bước này mới bắt đầu viết code xử lý API
 
@@ -45,13 +50,15 @@
     - Truy cập model thông qua tên model viết thường theo kiểu camelCase
       - Ví dụ model tên là Product thì truy cập bằng prisma.product
     - Lấy tất cả bản ghi
-      - javascript:
-        const products = await prisma.product.findMany()
+      - ```javascript
+        const products = await prisma.product.findMany();
+        ```
     - Truy vấn theo điều kiện
-      - javascript:
+      - ```javascript
         const product = await prisma.product.findUniqueOrThrow({
-        where: { id: parseInt(req.params.id) }
-        })
+          where: { id: parseInt(req.params.id) },
+        });
+        ```
     - findUniqueOrThrow sẽ tự động văng lỗi nếu không tìm thấy bản ghi, giúp xử lý lỗi tập trung
     - Thay vì viết query SQL thủ công, Prisma giúp giảm độ phức tạp và hạn chế lỗ hổng SQL injection
 
@@ -128,30 +135,34 @@
     - Yêu cầu Node.js phiên bản 14 hoặc 18, dùng NVM để quản lý nhiều phiên bản Node.js
       - Cài NVM từ kho GitHub chính thức tại github.com/nvm-sh/nvm
       - Sau khi cài NVM, cài Node 18 bằng lệnh sau
-        - bash:
+        - ```bash
           nvm install 18
+          ```
     - Cài Soketi CLI toàn cục
-      - bash:
+      - ```bash
         npm install -g @soketi/soketi
+        ```
     - Tạo file cấu hình socketi-config.json
-      - json:
+      - ```json
         {
-        "debug": true,
-        "port": 6002,
-        "appManager.driver": "array",
-        "appManager.array.apps": [
-        {
-        "id": "app-1",
-        "key": "app-key-1",
-        "secret": "app-secret-1",
-        "webhooks": []
+          "debug": true,
+          "port": 6002,
+          "appManager.driver": "array",
+          "appManager.array.apps": [
+            {
+              "id": "app-1",
+              "key": "app-key-1",
+              "secret": "app-secret-1",
+              "webhooks": []
+            }
+          ]
         }
-        ]
-        }
+        ```
       - Lưu ý xóa phần webhooks hoặc đảm bảo file JSON hợp lệ, không có dấu phẩy thừa
     - Khởi động Soketi với file cấu hình
-      - bash:
+      - ```bash
         soketi start --config=socketi-config.json
+        ```
     - Một ứng dụng (app) tương ứng với một trang web, có thể định nghĩa nhiều app trong cùng một máy chủ
     - Mỗi app có ba thông số quan trọng
       - id dùng để nhận dạng app
@@ -160,62 +171,69 @@
 
   - Kết nối từ Frontend với pusher-js
     - Cài thư viện
-      - bash:
+      - ```bash
         npm install pusher-js
+        ```
     - Khởi tạo Pusher client trong file riêng để tái sử dụng
-      - javascript:
-        import Pusher from "pusher-js"
+      - ```javascript
+        import Pusher from "pusher-js";
 
         const socketClient = new Pusher("app-key-1", {
-        cluster: "mt1",
-        wsHost: "127.0.0.1",
-        wsPort: 6002,
-        forceTLS: false,
-        enabledTransports: ["ws", "wss"]
-        })
+          cluster: "mt1",
+          wsHost: "127.0.0.1",
+          wsPort: 6002,
+          forceTLS: false,
+          enabledTransports: ["ws", "wss"],
+        });
 
-        export default socketClient
+        export default socketClient;
+        ```
 
     - Cluster có thể điền bất kỳ giá trị nào khi dùng Soketi vì không áp dụng clustering thực sự
     - Sau khi khởi tạo, kết nối WebSocket sẽ hiển thị trong tab Network của DevTools với trạng thái pending, nghĩa là kết nối đang được giữ sống
 
   - Subscribe channel và lắng nghe sự kiện từ Frontend
-    - javascript:
-      const channel = socketClient.subscribe("conversation-5")
+    - ```javascript
+      const channel = socketClient.subscribe("conversation-5");
 
       channel.bind("message", (data) => {
-      console.log(data)
-      })
+        console.log(data);
+      });
+      ```
 
     - Khi không dùng nữa cần unsubscribe để giải phóng tài nguyên
-      - javascript:
-        channel.unsubscribe()
+      - ```javascript
+        channel.unsubscribe();
+        ```
 
   - Gửi sự kiện từ Backend với thư viện Pusher server
     - Cài thư viện vào dự án backend
-      - bash:
+      - ```bash
         npm install pusher
+        ```
     - Khởi tạo Pusher instance trong file riêng ở backend
-      - javascript:
-        const Pusher = require("pusher")
+      - ```javascript
+        const Pusher = require("pusher");
 
         const pusher = new Pusher({
-        appId: process.env.SOCKET_APP_ID,
-        key: process.env.SOCKET_APP_KEY,
-        secret: process.env.SOCKET_APP_SECRET,
-        host: "127.0.0.1",
-        port: "6002",
-        useTLS: false
-        })
+          appId: process.env.SOCKET_APP_ID,
+          key: process.env.SOCKET_APP_KEY,
+          secret: process.env.SOCKET_APP_SECRET,
+          host: "127.0.0.1",
+          port: "6002",
+          useTLS: false,
+        });
 
-        module.exports = pusher
+        module.exports = pusher;
+        ```
 
     - Gửi sự kiện vào channel từ backend
-      - javascript:
+      - ```javascript
         await pusher.trigger("conversation-5", "message", {
-        action: "created",
-        payload: message
-        })
+          action: "created",
+          payload: message,
+        });
+        ```
     - Luồng hoàn chỉnh
       - Frontend gửi HTTP POST lên backend để lưu tin nhắn vào database
       - Backend lưu xong, gọi pusher.trigger để publish sự kiện vào channel tương ứng
@@ -237,7 +255,7 @@
       - id, content (kiểu Text, không dùng String vì tin nhắn có thể dài), type (text, image, like,...), conversationId, userId
       - Dùng varchar thông thường cho type để dễ mở rộng sau này
     - Schema Prisma tương ứng
-      - prisma:
+      - ```prisma
         model Conversation {
         id Int @id @default(autoincrement())
         name String?
@@ -263,21 +281,24 @@
         conversation Conversation @relation(fields: [conversationId], references: [id])
         user User @relation(fields: [userId], references: [id])
         }
+        ```
 
   - Bảo mật conversation ID
     - Dùng ID tự tăng khiến người dùng có thể dò ra conversation của người khác bằng cách thay đổi số trên URL
     - Giải pháp là thêm trường UUID vào bảng Conversation và dùng UUID trên URL thay cho ID số
-      - javascript:
-        const { randomUUID } = require("crypto")
-        const uuid = randomUUID()
+      - ```javascript
+        const { randomUUID } = require("crypto");
+        const uuid = randomUUID();
+        ```
     - UUID là chuỗi ngẫu nhiên như `550e8400-e29b-41d4-a716-446655440000`, không thể dò theo thứ tự
     - UUID được tạo theo thuật toán đảm bảo không trùng, không cần kiểm tra trùng lặp khi insert
 
   - Luồng xử lý cuộc hội thoại mới
     - Frontend hiển thị danh sách người dùng, người dùng bấm vào một người để bắt đầu chat
     - Điều hướng sang trang /new-chat với query string chứa userId của người được chọn
-      - jsx:
-          <Link to={`/new-chat?userId=${user.id}`}>{user.name}</Link>
+      - ```jsx
+        <Link to={`/new-chat?userId=${user.id}`}>{user.name}</Link>
+        ```
     - Trang new-chat chưa tạo conversation ngay để tránh tạo dữ liệu thừa trong database
     - Chỉ khi người dùng gửi tin nhắn đầu tiên mới thực hiện
       - Gọi API tạo conversation mới với type là DM và danh sách userIds gồm cả mình và người kia
@@ -294,38 +315,41 @@
     - POST /conversation/:id/message - tạo tin nhắn trong conversation
       - Sau khi lưu vào database, trigger sự kiện WebSocket để thông báo cho các client đang subscribe
     - GET /conversation/:id/message - lấy danh sách tin nhắn của một conversation
-      - javascript:
+      - ```javascript
         const messages = await prisma.message.findMany({
-        where: { conversationId: parseInt(req.params.id) }
-        })
+          where: { conversationId: parseInt(req.params.id) },
+        });
+        ```
 
   - Xử lý real-time trong Frontend
     - Khi vào trang conversation, subscribe vào channel tương ứng bằng conversationId
-      - javascript:
+      - ```javascript
         useEffect(() => {
-        const channel = socketClient.subscribe(`conversation-${conversationId}`)
+          const channel = socketClient.subscribe(
+            `conversation-${conversationId}`,
+          );
 
-            channel.bind("message", (data) => {
-              if (data.action === "created") {
-                setMessages((prev) => [...prev, data.payload])
-              }
-              if (data.action === "updated") {
-                setMessages((prev) =>
-                  prev.map((m) => (m.id === data.payload.id ? data.payload : m))
-                )
-              }
-              if (data.action === "deleted") {
-                setMessages((prev) =>
-                  prev.filter((m) => m.id !== data.payload.id)
-                )
-              }
-            })
-
-            return () => {
-              channel.unsubscribe()
+          channel.bind("message", (data) => {
+            if (data.action === "created") {
+              setMessages((prev) => [...prev, data.payload]);
             }
+            if (data.action === "updated") {
+              setMessages((prev) =>
+                prev.map((m) => (m.id === data.payload.id ? data.payload : m)),
+              );
+            }
+            if (data.action === "deleted") {
+              setMessages((prev) =>
+                prev.filter((m) => m.id !== data.payload.id),
+              );
+            }
+          });
 
-        }, [conversationId])
+          return () => {
+            channel.unsubscribe();
+          };
+        }, [conversationId]);
+        ```
 
     - Dùng action field trong payload để phân biệt loại sự kiện, tránh phải tạo nhiều channel khác nhau
     - Cleanup function unsubscribe cũ khi component unmount hoặc khi conversationId thay đổi
