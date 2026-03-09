@@ -1,6 +1,6 @@
 Hi chị, sau khi xem bài của chị, em có một số nhận xét như sau:
 
-- Vì lần đầu làm, nên em sẽ review hơi nhiều và chi tiết một chút để chị có thể hiểu rõ hơn về những điểm cần cải thiện. Những lần sau, chị sẽ quen hơn thì sẽ không mắc phải những lỗi này nữa đâu nha.
+- Vì lần đầu làm, nên em sẽ review chi tiết một chút để chị có thể hiểu rõ hơn về những điểm cần cải thiện. Những lần sau, chị sẽ quen hơn thì sẽ không mắc phải những lỗi này nữa đâu nha.
 
 - Phần font bị lỗi do có ký tự ’ (khác dấu nháy đơn) thuộc font Charter, chị có thể thay thế toàn bộ ký tự ’ bằng ký tự ' (dấu nháy đơn) trong dự án để tránh lỗi font nha.
 
