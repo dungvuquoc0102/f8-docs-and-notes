@@ -168,9 +168,9 @@ Terms like <i>loops, arrays</i>, and <i>syntax errors</i> swam around in my
 head...
 ```
 
-- Phần "It Feels Like We Don't Have Time" thiếu `<chị>` cho từ `do` trong câu "you do have time". Nên sửa thành `you <chị>do</chị> have time`.
+- Phần "It Feels Like We Don't Have Time" thiếu `<em>` cho từ `do` trong câu "you do have time". Nên sửa thành `you <em>do</chị> have time`.
 
-- Phần "Imagine Your Life After a Year of Learning" thiếu `<chị>` cho từ `way` trong câu "look way better". Nên sửa thành `look <chị>way</chị> better`.
+- Phần "Imagine Your Life After a Year of Learning" thiếu `<em>` cho từ `way` trong câu "look way better". Nên sửa thành `look <em>way</chị> better`.
 
 - Bài làm chưa có đoạn mã HTML nhúng trong bài báo. Nên thêm một khối `<pre><code>` ở vị trí phù hợp (ví dụ cuối bài).
 
