@@ -192,12 +192,6 @@ head...
 
 - Phần "Edited 14/3/2025" bị lỗi đánh máy: `<b>dited 14/3/2025:</b>` đang thiếu chữ "E". Nên sửa thành `<strong>Edited 14/3/2025:</strong>`.
 
-## 2. Game NESTER
-
-#### Điểm làm tốt:
-
-- Bài làm đáp ứng yêu cầu.
-
 **Đánh giá tổng quan:**
 
 > Điểm: 7 / 10
